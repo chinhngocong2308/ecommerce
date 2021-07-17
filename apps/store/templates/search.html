@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Tìm kiếm | {% endblock %}
+
+{% block content %}
+    <h1 class="title">Tìm kiếm</h1>
+    <h2 class="subtitle">Tìm kiếm từ khóa: "{{ query }}"</h2>
+
+    <hr>
+
+    <form method="get" action="{% url 'search' %}">
+        <div class="columns is-multiline">
+            <div class="column is-4">
+                <h2 class="is-size-5">Tìm kiếm theo tên</h2>
+
+                <div class="field">
+                    <label>Tìm kiếm từ khóa</label>
+
+                    <div class="control">
+                        <input type="text" name="query" class="input" value="{{ query }}">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Trong kho</label>
+
+                    <div class="control">
+                        <input type="checkbox" name="instock"{% if instock %}checked="checked"{% endif %}>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column is-4">
+                <h2 class="is-size-5">Lọc theo giá</h2>
+
+                <div class="field">
+                    <label>Từ</label>
+                    <div class="control">
+                        <input type="number" name="price_from" class="input" value="{{ price_from }}">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>đến</label>
+                    <div class="control">
+                        <input type="number" name="price_to" class="input" value="{{ price_to }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="column is-12">
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-success">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+
+    {% with products as list_products %}
+        {% include 'parts/product_list.html' %}
+    {% endwith %}
+{% endblock %}

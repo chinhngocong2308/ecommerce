@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">My account</h1>
+
+    <a href="{% url 'logout' %}" class="button is-danger">Đăng xuất</a>
+
+    <hr>
+
+    <h2 class="subtitle">Thông tin tài khoản</h2>
+
+    <p><strong>Tên: </strong>{{ request.user.get_full_name }}</p>
+    <p><strong>E-mail: </strong>{{ request.user.email }}</p>
+    <p><strong>Địa chỉ: </strong>{{ request.user.userprofile.address }}</p>
+    <p><strong>Zip and place: </strong>{{ request.user.userprofile.zipcode }} {{ request.user.userprofile.place }}</p>
+    <p><strong>Số diện thoại: </strong>{{ request.user.userprofile.phone }}</p>
+
+    <hr>
+
+    <h2 class="subtitle">Đơn đặt hàng</h2>
+
+    {% for order in request.user.orders.all %}
+        <article class="message is-light">
+            <div class="message-header">
+                <p>{{ order.created_at }}</p>
+                <p><strong>Trạng thái: </strong>{{ order.status }}</p>
+            </div>
+
+            <div class="message-body">
+                <table class="table is-striped is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in order.items.all %}
+                            <tr>
+                                <td>{{ item.product.title }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.price }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td>Tổng tiền</td>
+                            <td>{{ order.get_total_quantity }}</td>
+                            <td>{{ order.paid_amount }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </article>
+    {% empty %}
+        <p>You don't have any order yet...</p>
+    {% endfor %}
+{% endblock %}
